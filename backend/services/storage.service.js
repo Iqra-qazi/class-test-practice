@@ -1,11 +1,20 @@
 import ImageKit from '@imagekit/nodejs';
 
-const client = new ImageKit({
-  privateKey: "private_YRZ1RqbIcv84oKa2lHuEOtfhxwA="
-});
+let client;
+
+function getClient() {
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+  if (!privateKey) {
+    throw new Error("IMAGEKIT_PRIVATE_KEY must be configured.");
+  }
+  if (!client) {
+    client = new ImageKit({ privateKey });
+  }
+  return client;
+}
 
 async function uploadFile(buffer){
-    const response = await client.files.upload({
+    const response = await getClient().files.upload({
         file: buffer.toString("base64"),
         fileName: 'image'+Date.now()+".jpg",
         folder: "products"

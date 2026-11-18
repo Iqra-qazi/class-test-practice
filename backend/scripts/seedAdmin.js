@@ -4,8 +4,12 @@ import mongoose from "mongoose";
 import connectDB from "../src/db/db.js";
 import userModel from "../src/models/users.model.js";
 
-const email = process.env.ADMIN_EMAIL?.trim().toLowerCase() || "admin@clinic.com";
-const password = process.env.ADMIN_PASSWORD || "admin123";
+const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+const password = process.env.ADMIN_PASSWORD;
+
+if (!email || typeof password !== "string" || password.length < 8) {
+  throw new Error("Set ADMIN_EMAIL and ADMIN_PASSWORD (at least 8 characters) before running this script.");
+}
 
 try {
   await connectDB();

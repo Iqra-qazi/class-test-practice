@@ -43,6 +43,7 @@ export async function registerUser(req, res, next) {
         message: "Account could not be created because of a conflicting database index.",
       });
     }
+    console.error("Error registering user:", error);
     return next(error);
   }
 }
